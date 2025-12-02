@@ -1,15 +1,33 @@
 # elysia-dynamic
 
-To install dependencies:
+Elysia plugin. Only works with Bun.
 
-```bash
-bun install
+Supports a subset of options from Elysia static plugin. (`assets`, `prefix`, `indexHTML`)
+
+## Install
+```sh
+bun add github:soshimee/elysia-dynamic
 ```
 
-To run:
+## Example
+```ts
+// index.ts
+import Elysia from "elysia";
+import dynamicPlugin from "elysia-dynamic";
+import staticPlugin from "@elysiajs/static";
 
-```bash
-bun run index.ts
+new Elysia()
+	.use(dynamicPlugin({ prefix: "/" }))
+	.use(staticPlugin({ prefix: "/" }))
+	.listen(3000);
 ```
 
-This project was created using `bun init` in bun v1.3.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+```ts
+// public/index.ts
+import Elysia from "elysia";
+
+export default new Elysia()
+	.get("/", () => "Hello World!");
+```
+
+Visiting `http://localhost:3000` (or `http://localhost:3000/index.ts`) outputs `Hello World!`.
