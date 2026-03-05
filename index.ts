@@ -4,12 +4,13 @@ import path from "path";
 type Options = {
 	assets?: string,
 	prefix?: string,
-	indexHTML?: boolean
+	indexHTML?: boolean,
+	fileTypes?: string[]
 };
 
-export const dynamicPlugin = async ({ assets = "public", prefix = "/public", indexHTML = true }: Options = {}): Promise<Elysia> => {
+export const dynamicPlugin = async ({ assets = "public", prefix = "/public", indexHTML = true, fileTypes = ["js", "jsx", "ts", "tsx"] }: Options = {}): Promise<Elysia> => {
 	const app = new Elysia({ name: "dynamic", seed: prefix });
-	const glob = new Bun.Glob("**/*.{js,jsx,ts,tsx}");
+	const glob = new Bun.Glob(`**/*.{${fileTypes.join()}}`);
 	if (!assets.startsWith("./") && !assets.startsWith("/")) assets = "./" + assets;
 	for await (const file of glob.scan(assets)) {
 		const f = (await import(path.resolve(assets, file))).default;
